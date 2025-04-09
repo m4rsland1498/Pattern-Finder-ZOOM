@@ -1,9 +1,11 @@
-# ZoomIn_g
+# 🔎 ZoomIn_g
 🕹️ Pattern spotting game!
+
 ⏰ Beat the clock...
+
 🖥️ And get inside.
 
-## 🖥️ Installation
+## ⬇️ Installation
 
 Dependencies:
 Pygame
