@@ -47,6 +47,10 @@ def toFind(screen, width, height):
     screen.blit(sqSubsurface, (100-0.5*length,700-0.5*length))
     pygame.display.flip()
 
+def drawSelect():
+    pass
+    # continue code
+
 def main():
     pygame.init()
     width, height = 800, 800
@@ -64,10 +68,16 @@ def main():
     toFind(screen, width, height)
 
     running = True
+    isJustClicked = False
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if pygame.mouse.get_pressed()[0] and isJustClicked == False:
+                isJustClicked = True
+                # continue code to draw select box
+            if not(pygame.mouse.get_pressed()[0]):
+                isJustClicked = False
 
 
     pygame.quit()
