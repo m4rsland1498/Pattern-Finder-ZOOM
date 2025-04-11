@@ -52,21 +52,40 @@ def toFind(screen, width, height):
     lengthToFind = length
 
 def drawSelect(screen, startPos, currentPos):
-    # v1
+    # v2
+    '''
     w = currentPos[0]-startPos[0]
     if w < 1:
         w = 1
     h = currentPos[1]-startPos[1]
     if h < 1:
         h = 1
-    #pygame.draw.rect(screen, [0,0,255], (startPos[0], startPos[1], w, h))
-    #pygame.display.flip()
-
-    # v2
     selectBox = pygame.Surface((w, h), pygame.SRCALPHA)
     selectBox.set_alpha(128)
     selectBox.fill((50,200,255))
     screen.blit(selectBox, (startPos[0], startPos[1]))
+    pygame.display.flip()
+    '''
+
+    # v3
+    w = currentPos[0]-startPos[0]
+    h = currentPos[1]-startPos[1]
+    global startX, startY
+    startX = startPos[0]
+    startY = startPos[1]
+    if w == 0:
+        w = 1
+    elif w < 0:
+        startX = currentPos[0]
+    if h == 0:
+        h = 1
+    elif h < 0:
+        startY = currentPos[1]
+
+    selectBox = pygame.Surface((abs(w), abs(h)), pygame.SRCALPHA)
+    selectBox.set_alpha(128)
+    selectBox.fill((50,200,255))
+    screen.blit(selectBox, (startX, startY))
     pygame.display.flip()
 
 def redraw(screen, screenArray):
@@ -80,10 +99,11 @@ def redraw(screen, screenArray):
     pygame.display.flip()
 
 def checkSelection():
-    if (xToFind - 50) <= startPos[0] <= (xToFind + 50):
-        if (yToFind - 50) <= startPos[1] <= (yToFind + 50):
-            if (lengthToFind - 50) <= (currentPos[0] - startPos[0]) <= (lengthToFind + 50):
-                if (lengthToFind - 50) <= (currentPos[1] - startPos[1]) <= (lengthToFind + 50):
+    global startX, startY
+    if (xToFind - 50) <= startX <= (xToFind + 50):
+        if (yToFind - 50) <= startY <= (yToFind + 50):
+            if (lengthToFind - 50) <= abs(currentPos[0] - startPos[0]) <= (lengthToFind + 50):
+                if (lengthToFind - 50) <= abs(currentPos[1] - startPos[1]) <= (lengthToFind + 50):
                     print("Found!")
 
 def main():
@@ -116,6 +136,9 @@ def main():
     global startPos, currentPos
     startPos = pygame.mouse.get_pos()
     currentPos = pygame.mouse.get_pos()
+    global startX, startY
+    startX = startPos[0]
+    startY = startPos[1]
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
