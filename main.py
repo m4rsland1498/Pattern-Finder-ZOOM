@@ -69,7 +69,7 @@ def drawSelect(screen, startPos, currentPos):
     elif h < 0:
         startY = currentPos[1]
 
-    selectBox = pygame.Surface((abs(w), abs(h)), pygame.SRCALPHA)
+    selectBox = pygame.Surface((abs(w), abs(h)))
     selectBox.set_alpha(128)
     selectBox.fill((50,200,255))
     screen.blit(selectBox, (startX, startY))
@@ -89,6 +89,7 @@ def redraw(screen):
     textSurface = myFont.render("ZoomIn_g", False, (0,255,0))
     screen.blit(textSurface, (250, 640))
     pygame.display.flip()
+    drawCRT(screen)
 
 def checkSelection(screen):
     global startX, startY
@@ -100,8 +101,17 @@ def checkSelection(screen):
                     global isFound
                     isFound = True
 
+def drawCRT(screen):
+    for i in range(160):
+        line = pygame.Surface((800, 2))
+        line.set_alpha(50)
+        line.fill((50,50,50))
+        screen.blit(line, (0, i*5))
+    pygame.display.flip()
+
 def main():
     pygame.init()
+    pygame.display.set_caption("ZoomIn_g")
     global width, height
     width, height = 800, 800
     screen = pygame.display.set_mode((width, height))
