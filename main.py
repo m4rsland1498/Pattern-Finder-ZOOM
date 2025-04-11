@@ -4,8 +4,10 @@ import pygame
 import random
 import time
 
-def initialCanvas(screen, screenArray):
+def initialCanvas(screen):
     pygame.draw.rect(screen, [0,0,0], (0,600,200,200))
+    global screenArray
+    screenArray = []
     for i in range(8):
         for j in range(6):
             r=random.randint(0,80)
@@ -35,7 +37,7 @@ def drawShapes(screen, width, height):
 
 def toFind(screen, width, height):
     displaySurface = pygame.display.get_surface()
-    length = random.randint(50,200)
+    length = random.randint(100,195)
     x = random.randint(0,width-length)
     y = random.randint(0,height-length)
     sqRect = pygame.Rect(x,y,length,length)
@@ -43,7 +45,8 @@ def toFind(screen, width, height):
     sqSubsurface = pygame.Surface((length,length))
     sqSubsurface.blit(displaySurface, (0,0), sqRect)
 
-    #blitVals = [sqSubsurface, (100-0.5*length,700-0.5*length)]
+    global blitVals
+    blitVals = []
     blitVals.append(sqSubsurface)
     blitVals.append((100-0.5*length,700-0.5*length))
     global xToFind, yToFind, lengthToFind
@@ -72,36 +75,48 @@ def drawSelect(screen, startPos, currentPos):
     screen.blit(selectBox, (startX, startY))
     pygame.display.flip()
 
-def redraw(screen, screenArray):
-    screen.fill("white")
+def redraw(screen):
+    screen.fill("black")
+    global screenArray
     pygame.draw.rect(screen, [0,0,0], (0,600,200,200))
     for i in screenArray:
         colour = i[0]
         pos_s = i[1]
         pygame.draw.rect(screen, colour, pos_s)
     screen.blit(blitVals[0], blitVals[1])
+    pygame.font.init()
+    myFont = pygame.font.SysFont("Courier", 100)
+    textSurface = myFont.render("ZoomIn_g", False, (0,255,0))
+    screen.blit(textSurface, (250, 640))
     pygame.display.flip()
 
-def checkSelection():
+def checkSelection(screen):
     global startX, startY
     if (xToFind - 50) <= startX <= (xToFind + 50):
         if (yToFind - 50) <= startY <= (yToFind + 50):
             if (lengthToFind - 50) <= abs(currentPos[0] - startPos[0]) <= (lengthToFind + 50):
                 if (lengthToFind - 50) <= abs(currentPos[1] - startPos[1]) <= (lengthToFind + 50):
-                    print("Found!")
+                    initialCanvas(screen)
+                    global isFound
+                    isFound = True
 
 def main():
     pygame.init()
+    global width, height
     width, height = 800, 800
     screen = pygame.display.set_mode((width, height))
-    screen.fill("white")
+    screen.fill("black")
     pygame.display.flip()
+
+    global isFound
+    isFound = False
 
     # virtual height
     height = 600
 
+    global screenArray
     screenArray = []
-    initialCanvas(screen, screenArray)
+    initialCanvas(screen)
     for i in screenArray:
         colour = i[0]
         pos_s = i[1]
@@ -127,21 +142,23 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if isFound:
+                isFound = False
+                toFind(screen, width, height)
             if pygame.mouse.get_pressed()[0] and isJustClicked == False:
                 isJustClicked = True
                 startPos = pygame.mouse.get_pos()
                 drawSelect(screen, startPos, startPos)
             elif pygame.mouse.get_pressed()[0]:
                 currentPos = pygame.mouse.get_pos()
-                redraw(screen, screenArray)
+                redraw(screen)
                 drawSelect(screen, startPos, currentPos)
             if not(pygame.mouse.get_pressed()[0]):
-                checkSelection()
+                checkSelection(screen)
                 startPos = pygame.mouse.get_pos()
                 currentPos = pygame.mouse.get_pos()
-                redraw(screen, screenArray)
+                redraw(screen)
                 isJustClicked = False
-
 
     pygame.quit()
 
