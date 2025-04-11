@@ -116,7 +116,6 @@ def main():
     global startPos, currentPos
     startPos = pygame.mouse.get_pos()
     currentPos = pygame.mouse.get_pos()
-    print(startPos)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
