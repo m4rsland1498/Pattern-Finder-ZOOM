@@ -52,22 +52,6 @@ def toFind(screen, width, height):
     lengthToFind = length
 
 def drawSelect(screen, startPos, currentPos):
-    # v2
-    '''
-    w = currentPos[0]-startPos[0]
-    if w < 1:
-        w = 1
-    h = currentPos[1]-startPos[1]
-    if h < 1:
-        h = 1
-    selectBox = pygame.Surface((w, h), pygame.SRCALPHA)
-    selectBox.set_alpha(128)
-    selectBox.fill((50,200,255))
-    screen.blit(selectBox, (startPos[0], startPos[1]))
-    pygame.display.flip()
-    '''
-
-    # v3
     w = currentPos[0]-startPos[0]
     h = currentPos[1]-startPos[1]
     global startX, startY
